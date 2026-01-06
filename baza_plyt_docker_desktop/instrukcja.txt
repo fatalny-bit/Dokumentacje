@@ -8,3 +8,15 @@ Prosta aplikach aapche php mariadb
 
 
 
+projekt/
+ ├── web/
+ │    └── index.php
+ └── Dockerfile
+
+
+Manifesty
+
+projekt/k8s/
+ ├── secret.yaml
+ ├── mariadb.yaml
+ └── web.yaml
