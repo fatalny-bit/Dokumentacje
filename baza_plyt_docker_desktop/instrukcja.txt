@@ -1,0 +1,10 @@
+
+1. Struktura aplikacji i obrazy kontenerów
+2. Manifesty Kubernetes (YAML) 
+3. Konfiguracja komunikacji między usługami
+4. Sposób uruchamiania i testowania 
+
+Prosta aplikach aapche php mariadb
+
+
+
