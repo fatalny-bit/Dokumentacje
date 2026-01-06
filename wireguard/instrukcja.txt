@@ -28,8 +28,8 @@ podman run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ="Europe/Warsaw" \
-  -e SERVERURL="87.207.218.57" \
-  -e SERVERPORT=51192 \
+  -e SERVERURL="zewnetrzny adres IP" \
+  -e SERVERPORT=51820 \
   -e PEERS=1 \less
   -e PEERDNS=192.168.0.6 \
   -e INTERNAL_SUBNET=10.13.13.0/24 \
@@ -73,7 +73,7 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ="Europe/Warsaw" \
-  -e SERVERURL="87.207.218.57" \
+  -e SERVERURL="zewnetrzny adres IP" \
   -e SERVERPORT=51820 \
   -e PEERS=1 \
   -e PEERDNS=192.168.0.6 \
