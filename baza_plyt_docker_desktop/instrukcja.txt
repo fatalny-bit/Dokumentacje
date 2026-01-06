@@ -14,9 +14,65 @@ projekt/
  └── Dockerfile
 
 
+Tworzenie obrazu dla aplikacji na podstawie Dockerfile
+
+Sprawdź, czy Docker Desktop i Kubernetes używają tego samego kontekstu
+# docker context ls
+
+docker context ls              
+NAME            DESCRIPTION                               DOCKER ENDPOINT                             ERROR
+default *       Current DOCKER_HOST based configuration   npipe:////./pipe/docker_engine
+desktop-linux   Docker Desktop                            npipe:////./pipe/dockerDesktopLinuxEngine
+
+Uzywany kontekst zaznaczony jest *
+
+Zmiana kontekstu na defautl:
+# docker context use default
+
+Teraz tworzymy obraz
+
+# docker build -t webapp:latest .
+
+
 Manifesty
 
 projekt/k8s/
- ├── secret.yaml
+ ├── secret.yaml   # Secret z hasłem do bazy
  ├── mariadb.yaml
  └── web.yaml
+
+
+Uruchamianie manifestów
+
+# kubectl apply -f secret.yaml
+# kubectl get secrets
+
+wynik:
+mariadb-secret   Opaque   1   ...
+
+# kubectl apply -f mariadb.yaml
+# kubectl get pods
+
+NAME                       READY   STATUS    RESTARTS   AGE
+mariadb-694687f59c-zvk54   1/1     Running   0          10m
+
+Przeglądanie logów poda
+
+# kubectl logs deployment/mariadb
+
+
+Uruchomienie aplikach web 
+# kubectl apply -f .\web.yaml
+
+Restartowanie poda web
+
+# kubectl delete pod -l app=web
+
+
+Co dalej
+
+Możemy teraz:
+👉 dodać PersistentVolume dla MariaDB,
+👉 dodać ConfigMap dla konfiguracji PHP,
+👉 dodać Ingress, żeby nie używać NodePort,
+👉 rozwinąć aplikację o kolejne pliki PHP.
