@@ -26,6 +26,13 @@ spec:
           value: testdb
         ports:
         - containerPort: 3306
+        volumeMounts:
+        - name: mariadb-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mariadb-storage
+        persistentVolumeClaim:
+          claimName: mariadb-pvc
 ---
 apiVersion: v1
 kind: Service

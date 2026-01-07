@@ -1,0 +1,90 @@
+1. Utwórz PVC dla MariaDB
+
+tworzymy nowy manifest mariadb-pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pvc
+  namespace: webapp-ns
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+
+i odpalamy go
+# kubectl apply -f mariadb-pvc.yaml
+
+# kubectl get pvc -n webapp-ns
+NAME          STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+mariadb-pvc   Bound    pvc-19432617-61cb-4f47-96be-cda80eefff6c   1Gi        RWO            hostpath       <unset>                 3m28s
+
+2. Skopiuj dane BEZPOŚREDNIO z poda (nie z kontenera Dockera!)
+
+# kubectl cp webapp-ns/mariadb-694687f59c-xkvnd:/var/lib/mysql ./mysql-data
+
+PS F:\repos\Dokumentacje\baza_plyt_docker_desktop\projekt\k8s> ls .\mysql-data\
+
+
+    Directory: F:\repos\Dokumentacje\baza_plyt_docker_desktop\projekt\k8s\mysql-data
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        07.01.2026     14:18                mysql
+d-----        07.01.2026     14:18                performance_schema
+d-----        07.01.2026     14:18                sys
+d-----        07.01.2026     14:18                testdb
+-a----        07.01.2026     14:18            118 .my-healthcheck.cnf
+-a----        07.01.2026     14:18        4907008 aria_log.00000001
+-a----        07.01.2026     14:18             52 aria_log_control
+-a----        07.01.2026     14:18              9 ddl_recovery.log
+-a----        07.01.2026     14:18       12582912 ibdata1
+-a----        07.01.2026     14:18       12582912 ibtmp1
+-a----        07.01.2026     14:18            706 ib_buffer_pool
+-a----        07.01.2026     14:18      100663296 ib_logfile0
+-a----        07.01.2026     14:18             14 mariadb_upgrade_info
+-a----        07.01.2026     14:18              0 multi-master.info
+-a----        07.01.2026     14:18          24576 tc.log
+-a----        07.01.2026     14:18       10485760 undo001
+-a----        07.01.2026     14:18       10485760 undo002
+-a----        07.01.2026     14:18       10485760 undo003
+
+
+3. Skopiuj dane do PVC przez pod mariadb-copy (ten pod ma teraz podłaczonoe PVC na sciezce /mnt)
+
+# kubectl cp ./mysql-data webapp-ns/mariadb-copy:/mnt
+
+# kubectl exec -it mariadb-copy -n webapp-ns -- ls /mnt
+mysql-data
+
+4. kasujemy pod tymczasowy
+
+# kubectl delete pod mariadb-copy -n webapp-ns
+
+# kubectl get pods -n webapp-ns
+NAME                       READY   STATUS        RESTARTS        AGE
+mariadb-694687f59c-xkvnd   1/1     Running       0               115m
+mariadb-copy               1/1     Terminating   2 (4m27s ago)   124m
+web-f746bd866-867x5        1/1     Running       1 (140m ago)    7h45m
+
+5. w manifeście mariadb.yaml dopisuje
+
+volumeMounts:
+- name: mariadb-storage
+  mountPath: /var/lib/mysql
+
+volumes:
+- name: mariadb-storage
+  persistentVolumeClaim:
+    claimName: mariadb-pvc
+
+
+i uruchammiam nowy manifest
+# kubectl apply -f mariadb.yaml -n webapp-ns
+
+
+

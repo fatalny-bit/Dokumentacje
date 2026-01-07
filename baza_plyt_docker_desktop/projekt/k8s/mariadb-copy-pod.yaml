@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mariadb-copy
+  namespace: webapp-ns
+spec:
+  containers:
+  - name: helper
+    image: busybox
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - name: data
+      mountPath: /mnt
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: mariadb-pvc
