@@ -27,3 +27,4 @@ metadata:
 # kubectl apply -f secret.yaml -n webapp-ns
 # kubectl apply -f mariadb.yaml -n webapp-ns
 # kubectl apply -f web.yaml -n webapp-ns
+

@@ -24,3 +24,4 @@ Deleted: sha256:55b90ec33e6f5a074016948aa96470d2afb3e105ea0e18ef5e897f5c59e73e11
 Czyszczenie z nieużywanych rzeczy, cache i innych śmieci (lepiej uzywać ostrożnie)
 
 # docker system prune -f
+
