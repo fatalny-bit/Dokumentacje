@@ -1,0 +1,30 @@
+Lista namespace (na czystym środowisku pokaze domyslne namespace)
+
+# kubectl get ns
+
+NAME              STATUS   AGE
+default           Active   12h
+kube-node-lease   Active   12h
+kube-public       Active   12h
+kube-system       Active   12h
+
+
+1. utworzenie namespace 
+
+# kubectl create namespace <nazwa namespace>
+
+2. Dostosowanie manifestów do namespace
+
+Każdy plik YAML musi mieć:
+
+metadata:
+  name: ...
+  namespace: webapp-ns
+
+
+3. Zastosowanie manifestów w namespace
+
+# kubectl apply -f secret.yaml -n webapp-ns
+# kubectl apply -f mariadb.yaml -n webapp-ns
+# kubectl apply -f web.yaml -n webapp-ns
+

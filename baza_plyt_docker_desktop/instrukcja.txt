@@ -76,3 +76,6 @@ Możemy teraz:
 👉 dodać ConfigMap dla konfiguracji PHP,
 👉 dodać Ingress, żeby nie używać NodePort,
 👉 rozwinąć aplikację o kolejne pliki PHP.
+
+
+
